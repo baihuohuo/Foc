@@ -10,6 +10,7 @@
 #include "open_loop_foc.h"
 #include "foc_pi_controller.h"
 #include "foc_current_loop.h"
+#include "bsp_vofa.h"
 
 #define APP_UQ_STEP              0.2f
 #define APP_SPEED_STEP_RAD_S     6.2831853f
@@ -43,11 +44,11 @@ static void App_PrintFOCState(void)
 
     state = OpenLoopFOC_GetState();
 
-    printf("Run=%u, Uq=%.2f V, Speed=%.2f rad/s, Theta=%.2f rad\r\n",
-           (unsigned int)state.IsRunning,
-           state.UqRef,
-           state.SpeedRefRadS,
-           state.ThetaE);
+//    printf("Run=%u, Uq=%.2f V, Speed=%.2f rad/s, Theta=%.2f rad\r\n",
+//           (unsigned int)state.IsRunning,
+//           state.UqRef,
+//           state.SpeedRefRadS,
+//           state.ThetaE);
 }
 
 static void App_PrintADCState(void)
@@ -58,25 +59,29 @@ static void App_PrintADCState(void)
     adc_data = BSP_ADC_GetAllData();
     current_loop_state = FOC_CurrentLoop_GetState();
 
-    printf("ADC value: IU=%.2fA, IV=%.2fA, IW=%.2fA, VBUS=%.2fV, TEMP_PIN=%.2fV, IMAX=%.2fA\r\n",
-           adc_data.RealPhaseMT2_AMPU,
-           adc_data.RealPhaseMT2_AMPV,
-           adc_data.RealPhaseMT2_AMPW,
-           adc_data.RealBMT2_VBUS,
-           adc_data.RealMT2_Vtemp,
-           adc_data.RealPhaseMT2_I_MAX);
+//    printf("ADC value: IU=%.2fA, IV=%.2fA, IW=%.2fA, VBUS=%.2fV, TEMP_PIN=%.2fV, IMAX=%.2fA\r\n",
+//           adc_data.RealPhaseMT2_AMPU,
+//           adc_data.RealPhaseMT2_AMPV,
+//           adc_data.RealPhaseMT2_AMPW,
+//           adc_data.RealBMT2_VBUS,
+//           adc_data.RealMT2_Vtemp,
+//           adc_data.RealPhaseMT2_I_MAX);
 
-    printf("FOC current: Ialpha=%.2fA, Ibeta=%.2fA, Id=%.2fA, Iq=%.2fA\r\n",
-           app_current_alpha_beta.Alpha,
-           app_current_alpha_beta.Beta,
-           app_current_dq.D,
-           app_current_dq.Q);
+//    printf("FOC current: Ialpha=%.2fA, Ibeta=%.2fA, Id=%.2fA, Iq=%.2fA\r\n",
+//           app_current_alpha_beta.Alpha,
+//           app_current_alpha_beta.Beta,
+//           app_current_dq.D,
+//           app_current_dq.Q);
 
-    printf("Current loop test: IdRef=%.2fA, IqRef=%.2fA, Ud=%.2fV, Uq=%.2fV\r\n",
-           current_loop_state.IdRef,
-           current_loop_state.IqRef,
-           app_current_loop_voltage_dq.D,
-           app_current_loop_voltage_dq.Q);
+//    printf("Current loop test: IdRef=%.2fA, IqRef=%.2fA, Ud=%.2fV, Uq=%.2fV\r\n",
+//           current_loop_state.IdRef,
+//           current_loop_state.IqRef,
+//           app_current_loop_voltage_dq.D,
+//           app_current_loop_voltage_dq.Q);
+
+    VOFA_SendJustFloat(adc_data.RealPhaseMT2_AMPU,
+                        adc_data.RealPhaseMT2_AMPV,
+                        adc_data.RealPhaseMT2_AMPW);
 }
 
 static void App_PrintADCCalibrationState(void)

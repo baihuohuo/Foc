@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\KEY;..\HARDWARE\Systick;..\HARDWARE\FOC;..\HARDWARE\TIM;..\HARDWARE\ADC</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\KEY;..\HARDWARE\Systick;..\HARDWARE\FOC;..\HARDWARE\TIM;..\HARDWARE\ADC;..\HARDWARE\VOFA</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -569,6 +569,16 @@
               <FileName>bsp_adc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\ADC\bsp_adc.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_vofa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\VOFA\bsp_vofa.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_vofa.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\VOFA\bsp_vofa.h</FilePath>
             </File>
           </Files>
         </Group>
