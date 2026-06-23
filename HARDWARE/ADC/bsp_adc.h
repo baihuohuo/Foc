@@ -6,7 +6,7 @@
 /* -----------------------宏定义 -------------------*/
 #define BSP_ADC_REFERENCE_VOLTAGE          3.3f        // ADC参考电压, 单位: V
 #define BSP_ADC_RESOLUTION_COUNT           4095.0f     // 12位ADC最大计数值
-#define BSP_ADC_SAMPLE_COUNT               5u          // ADC1 DMA采样通道数量
+#define BSP_ADC_SAMPLE_COUNT               3u          // ADC1 DMA采样通道数量
 
 /* DMA buffer下标, 必须和ADC规则通道Rank顺序一致 */
 #define BSP_ADC_INDEX_PHASE_MT2_AMPU       0u          // PA6  ADC1_IN6  MT2_AMPU
@@ -23,7 +23,7 @@
 #define BSP_ADC_MT2_AMP_SHUNT_RESISTOR     0.02f       // 采样电阻, 单位: Ω
 #define BSP_ADC_MT2_AMP_GAIN               (5100.0f / (1200.0f + 68.0f))  // 放大器增益
 #define BSP_ADC_MT2_AMP_VOLTAGE_SCALE      (1.0f / (BSP_ADC_MT2_AMP_SHUNT_RESISTOR * BSP_ADC_MT2_AMP_GAIN))
-#define BSP_ADC_MT2_AMP_CALIBRATION_TIMES  1000u       // 零点校准采样次数
+#define BSP_ADC_MT2_AMP_CALIBRATION_TIMES  3000u       // 零点校准采样次数
 
 /* 温度: 第一版直接返回ADC引脚电压, 单位: V, 非摄氏度 */
 #define BSP_ADC_MT2_Vtemp_SCALE            1.0f

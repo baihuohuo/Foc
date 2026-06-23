@@ -80,6 +80,14 @@ void TIM8_PWM_Init(void)
     TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);
     TIM_OC3PreloadConfig(TIM8, TIM_OCPreload_Enable);
     TIM_ARRPreloadConfig(TIM8, ENABLE);
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;
+	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
+	TIM_OCInitStructure.TIM_Pulse = 4200u - 500u;
+	TIM_OC4Init(TIM8, &TIM_OCInitStructure);
+	TIM_OC4PreloadConfig(TIM8, TIM_OCPreload_Enable);
+    TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_OC4Ref);
 
     // 死区与刹车配置
     TIM_BDTRInitStructure.TIM_OSSRState = TIM_OSSRState_Enable;    // 运行模式关闭状态强制无效电平
@@ -113,7 +121,6 @@ void TIM8_PWM_Stop(void)
     TIM_SetCompare2(TIM8, 0);
     TIM_SetCompare3(TIM8, 0);
 
-    TIM_Cmd(TIM8, DISABLE);
 }
 
 // 设置三相占空比 (带上限保护)
@@ -123,20 +130,9 @@ void TIM8_PWM_SetDuty(uint16_t duty_a, uint16_t duty_b, uint16_t duty_c)
 
     period = TIM8_PWM_GetPeriod();
 
-    if (duty_a > period)
-    {
-        duty_a = period;
-    }
-
-    if (duty_b > period)
-    {
-        duty_b = period;
-    }
-
-    if (duty_c > period)
-    {
-        duty_c = period;
-    }
+    if (duty_a > period) duty_a = period;
+    if (duty_b > period) duty_b = period;
+    if (duty_c > period) duty_c = period;
 
     TIM_SetCompare1(TIM8, duty_a);
     TIM_SetCompare2(TIM8, duty_b);

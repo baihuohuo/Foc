@@ -14,7 +14,7 @@
 
 #define APP_UQ_STEP              0.2f
 #define APP_SPEED_STEP_RAD_S     6.2831853f
-#define APP_ADC_PRINT_PERIOD_MS  200u
+#define APP_ADC_PRINT_PERIOD_MS  1u
 
 static FOC_AlphaBetaTypeDef app_current_alpha_beta;
 static FOC_DQTypeDef app_current_dq;
@@ -79,9 +79,13 @@ static void App_PrintADCState(void)
 //           app_current_loop_voltage_dq.D,
 //           app_current_loop_voltage_dq.Q);
 
-    VOFA_SendJustFloat(adc_data.RealPhaseMT2_AMPU,
-                        adc_data.RealPhaseMT2_AMPV,
-                        adc_data.RealPhaseMT2_AMPW);
+float i_sum = adc_data.RealPhaseMT2_AMPU
+            + adc_data.RealPhaseMT2_AMPV
+            + adc_data.RealPhaseMT2_AMPW;
+
+VOFA_SendJustFloat(adc_data.RealPhaseMT2_AMPU,
+                   adc_data.RealPhaseMT2_AMPV,
+                   adc_data.RealPhaseMT2_AMPW);
 }
 
 static void App_PrintADCCalibrationState(void)
@@ -158,6 +162,7 @@ int main(void)
 
     OpenLoopFOC_Init();
     OpenLoopFOC_Stop();
+	BSP_DelayMs(100);
     BSP_ADC_CalibrateMT2AmpOffset();
     App_PrintADCCalibrationState();
     FOC_CurrentLoop_Init();
@@ -182,7 +187,7 @@ int main(void)
             adc_print_tick = 0u;
             App_PrintADCState();
         }
+		BSP_DelayMs(1);
 
-        BSP_DelayMs(1);
     }
 }

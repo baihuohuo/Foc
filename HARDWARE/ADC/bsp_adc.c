@@ -154,25 +154,23 @@ void BSP_ADC_Init(void)
     /* 配置ADC1参数: 12位, 扫描模式, 连续转换 */
     ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
     ADC_InitStructure.ADC_ScanConvMode = ENABLE;
-    ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
-    ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
-    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
+    ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+    ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_Rising;
+    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T8_TRGO;
     ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
     ADC_InitStructure.ADC_NbrOfConversion = BSP_ADC_SAMPLE_COUNT;
     ADC_Init(ADC1, &ADC_InitStructure);
 
-    /* 配置5个规则通道: U/V/W相电流 + 母线电压 + 温度 */
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_6,  1, ADC_SampleTime_84Cycles);
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_8,  2, ADC_SampleTime_84Cycles);
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_9,  3, ADC_SampleTime_84Cycles);
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_10, 4, ADC_SampleTime_84Cycles);
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_13, 5, ADC_SampleTime_84Cycles);
+
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_84Cycles);
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_8, 2, ADC_SampleTime_84Cycles);
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_9, 3, ADC_SampleTime_84Cycles);
 
     /* 使能ADC DMA请求, 启动ADC */
     ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
     ADC_DMACmd(ADC1, ENABLE);
     ADC_Cmd(ADC1, ENABLE);
-    ADC_SoftwareStartConv(ADC1);
+
 }
 
 void BSP_ADC_CalibrateMT2AmpOffset(void)
@@ -209,8 +207,8 @@ void BSP_ADC_Update(void)
     bsp_adc_data.RawAdcPhaseMT2_AMPU = bsp_adc_raw_buffer[BSP_ADC_INDEX_PHASE_MT2_AMPU];
     bsp_adc_data.RawAdcPhaseMT2_AMPV = bsp_adc_raw_buffer[BSP_ADC_INDEX_PHASE_MT2_AMPV];
     bsp_adc_data.RawAdcPhaseMT2_AMPW = bsp_adc_raw_buffer[BSP_ADC_INDEX_PHASE_MT2_AMPW];
-    bsp_adc_data.RawAdcBMT2_VBUS = bsp_adc_raw_buffer[BSP_ADC_INDEX_BMT2_VBUS];
-    bsp_adc_data.RawAdcMT2_Vtemp = bsp_adc_raw_buffer[BSP_ADC_INDEX_MT2_Vtemp];
+    bsp_adc_data.RawAdcBMT2_VBUS = 0u;
+    bsp_adc_data.RawAdcMT2_Vtemp = 0u;
 
     /* 计算三相电流最大值 */
     bsp_adc_data.RawAdcPhaseMT2_I_MAX = BSP_ADC_GetMax3(bsp_adc_data.RawAdcPhaseMT2_AMPU,
