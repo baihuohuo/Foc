@@ -7,84 +7,85 @@
 #include "bsp_adc.h"
 #include "bsp_vofa.h"
 #include "foc_math.h"
-#include "foc_open_loop.h"
 #include "foc_close_loop.h"
 
-#define APP_UQ_STEP              0.2f
-#define APP_SPEED_STEP_RAD_S     6.2831853f
-#define APP_ADC_PRINT_PERIOD_MS  10u
+#define APP_IQ_DEFAULT            0.30f
+#define APP_IQ_STEP               0.05f
+#define APP_IQ_MIN               -2.00f
+#define APP_IQ_MAX                2.00f
+#define APP_SPEED_DEFAULT         6.2831853f
+#define APP_SPEED_STEP_RAD_S      6.2831853f
+#define APP_CLOSE_LOOP_KP         0.05f
+#define APP_CLOSE_LOOP_KI         5.00f
+#define APP_CLOSE_LOOP_LIMIT      1.00f
+#define APP_PRINT_PERIOD_MS       10u
 
+static float app_iq_ref = APP_IQ_DEFAULT;
+static float app_speed_ref = APP_SPEED_DEFAULT;
 
 static void App_PrintFOCState(void)
 {
-}
+    FOC_CloseLoopStateTypeDef state;
 
-static void App_PrintADCState(void)
-{
-    BSP_ADC_DataTypeDef adc_data;
+    state = FOC_CloseLoop_GetState();
 
-    adc_data = BSP_ADC_GetAllData();
-
-    VOFA_SendJustFloat(adc_data.RealPhaseMT2_AMPU,
-                       adc_data.RealPhaseMT2_AMPV,
-                       adc_data.RealPhaseMT2_AMPW);
+VOFA_SendJustFloat(state.IdFeedback,
+                   state.IqFeedback,
+                   state.UdOutput);
 }
 
 static void App_KeyTask(void)
 {
-    OpenLoopFOC_StateTypeDef state;
-    float uq_ref;
-    float speed_ref;
-
-    state = OpenLoopFOC_GetState();
-    uq_ref = state.UqRef;
-    speed_ref = state.SpeedRefRadS;
-
     if (KEY1_EdgeRead() == KEY_DOWN)
     {
-        if (OpenLoopFOC_GetIsRunning() != 0u)
+        if (FOC_CloseLoop_GetIsRunning() != 0u)
         {
-            OpenLoopFOC_Stop();
+            FOC_CloseLoop_Stop();
         }
         else
         {
-            OpenLoopFOC_Start();
+            FOC_CloseLoop_SetTarget(0.0f, app_iq_ref);
+            FOC_CloseLoop_SetSpeed(app_speed_ref);
+            FOC_CloseLoop_Start();
         }
+
         App_PrintFOCState();
     }
 
     if (KEY2_EdgeRead() == KEY_DOWN)
     {
-        uq_ref += APP_UQ_STEP;
-        OpenLoopFOC_SetTarget(uq_ref, speed_ref);
+        app_iq_ref += APP_IQ_STEP;
+        app_iq_ref = FOC_Clamp(app_iq_ref, APP_IQ_MIN, APP_IQ_MAX);
+        FOC_CloseLoop_SetTarget(0.0f, app_iq_ref);
         App_PrintFOCState();
     }
 
     if (KEY3_EdgeRead() == KEY_DOWN)
     {
-        uq_ref -= APP_UQ_STEP;
-        OpenLoopFOC_SetTarget(uq_ref, speed_ref);
+        app_iq_ref -= APP_IQ_STEP;
+        app_iq_ref = FOC_Clamp(app_iq_ref, APP_IQ_MIN, APP_IQ_MAX);
+        FOC_CloseLoop_SetTarget(0.0f, app_iq_ref);
         App_PrintFOCState();
     }
 
     if (KEY4_EdgeRead() == KEY_DOWN)
     {
-        speed_ref += APP_SPEED_STEP_RAD_S;
-        OpenLoopFOC_SetTarget(uq_ref, speed_ref);
+        app_speed_ref += APP_SPEED_STEP_RAD_S;
+        FOC_CloseLoop_SetSpeed(app_speed_ref);
         App_PrintFOCState();
     }
 
     if (KEY5_EdgeRead() == KEY_DOWN)
     {
-        speed_ref -= APP_SPEED_STEP_RAD_S;
-        OpenLoopFOC_SetTarget(uq_ref, speed_ref);
+        app_speed_ref -= APP_SPEED_STEP_RAD_S;
+        FOC_CloseLoop_SetSpeed(app_speed_ref);
         App_PrintFOCState();
     }
 }
 
 int main(void)
 {
-    uint16_t adc_print_tick = 0u;
+    uint16_t print_tick = 0u;
 
     SysTick_Init();
     uart_init(115200);
@@ -95,30 +96,33 @@ int main(void)
     TIM8_PWM_ModuleInit();
     BSP_ADC_Init();
 
-    OpenLoopFOC_Init();
-    OpenLoopFOC_Stop();
+    FOC_CloseLoop_Init();
+    FOC_CloseLoop_Stop();
 
     BSP_DelayMs(100);
     BSP_ADC_CalibrateMT2AmpOffset();
 
-    OpenLoopFOC_SetTarget(OPEN_LOOP_FOC_DEFAULT_UQ, OPEN_LOOP_FOC_DEFAULT_SPEED_RAD_S);
-    OpenLoopFOC_SetControlPeriod(OPEN_LOOP_FOC_DEFAULT_CONTROL_PERIOD);
+    FOC_CloseLoop_SetTarget(0.0f, app_iq_ref);
+    FOC_CloseLoop_SetSpeed(app_speed_ref);
+    FOC_CloseLoop_SetBusVoltage(FOC_CLOSE_LOOP_DEFAULT_BUS_VOLTAGE);
+    FOC_CloseLoop_SetControlPeriod(FOC_CLOSE_LOOP_DEFAULT_CONTROL_PERIOD);
+    FOC_CloseLoop_SetPI(APP_CLOSE_LOOP_KP, APP_CLOSE_LOOP_KI);
+    FOC_CloseLoop_SetOutputLimit(APP_CLOSE_LOOP_LIMIT);
 
     TIM6_Control_Init(TIM6_CONTROL_DEFAULT_PERIOD_MS);
     TIM6_Control_Start();
-	
+
     App_PrintFOCState();
 
     while (1)
     {
         App_KeyTask();
-        BSP_ADC_Update();
 
-        adc_print_tick++;
-        if (adc_print_tick >= APP_ADC_PRINT_PERIOD_MS)
+        print_tick++;
+        if (print_tick >= APP_PRINT_PERIOD_MS)
         {
-            adc_print_tick = 0u;
-            App_PrintADCState();
+            print_tick = 0u;
+            App_PrintFOCState();
         }
     }
 }
