@@ -17,8 +17,8 @@ typedef struct
 
 typedef struct
 {
-  float D;  // D轴电压  
-  float Q;  // Q轴电压  
+  float D;  // D轴(电压和电流均可表示) 
+  float Q;  // Q轴(电压和电流均可表示) 
 }FOC_DQTypeDef;
 
 typedef struct

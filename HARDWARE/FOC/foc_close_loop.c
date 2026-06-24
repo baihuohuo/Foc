@@ -1,95 +1,96 @@
 #include "foc_close_loop.h"
 
-static FOC_CurrentLoopStateTypeDef foc_current_loop_state;
-static FOC_PIControllerTypeDef foc_current_loop_d_pi;
-static FOC_PIControllerTypeDef foc_current_loop_q_pi;
+static FOC_CloseLoopStateTypeDef foc_close_loop_state;
+static FOC_PIControllerTypeDef foc_close_loop_d_pi;
+static FOC_PIControllerTypeDef foc_close_loop_q_pi;
 
-void FOC_CurrentLoop_Init(void) 
+void FOC_CloseLoop_Init(void) 
 {
-    foc_current_loop_state.IdRef = FOC_CURRENT_LOOP_DEFAULT_ID_REF;
-    foc_current_loop_state.IqRef = FOC_CURRENT_LOOP_DEFAULT_IQ_REF;
-    foc_current_loop_state.IdFeedback = 0.0f;
-    foc_current_loop_state.IqFeedback = 0.0f;
-    foc_current_loop_state.UdOutput = 0.0f;
-    foc_current_loop_state.UqOutput = 0.0f;
+    foc_close_loop_state.IdRef = FOC_CLOSE_LOOP_DEFAULT_ID_REF;
+    foc_close_loop_state.IqRef = FOC_CLOSE_LOOP_DEFAULT_IQ_REF;
+    foc_close_loop_state.IdFeedback = 0.0f;
+    foc_close_loop_state.IqFeedback = 0.0f;
+    foc_close_loop_state.UdOutput = 0.0f;
+    foc_close_loop_state.UqOutput = 0.0f;
 
-    FOC_PIController_Init(&foc_current_loop_d_pi,
-                          FOC_CURRENT_LOOP_DEFAULT_KP,
-                          FOC_CURRENT_LOOP_DEFAULT_KI,
-                          FOC_CURRENT_LOOP_DEFAULT_CONTROL_PERIOD,
-                          -FOC_CURRENT_LOOP_DEFAULT_OUTPUT_LIMIT,
-                          FOC_CURRENT_LOOP_DEFAULT_OUTPUT_LIMIT);
+    FOC_PIController_Init(&foc_close_loop_d_pi,
+                          FOC_CLOSE_LOOP_DEFAULT_KP,
+                          FOC_CLOSE_LOOP_DEFAULT_KI,
+                          FOC_CLOSE_LOOP_DEFAULT_CONTROL_PERIOD,
+                          -FOC_CLOSE_LOOP_DEFAULT_OUTPUT_LIMIT,
+                          FOC_CLOSE_LOOP_DEFAULT_OUTPUT_LIMIT);
 
-    FOC_PIController_Init(&foc_current_loop_q_pi,
-                          FOC_CURRENT_LOOP_DEFAULT_KP,
-                          FOC_CURRENT_LOOP_DEFAULT_KI,
-                          FOC_CURRENT_LOOP_DEFAULT_CONTROL_PERIOD,
-                          -FOC_CURRENT_LOOP_DEFAULT_OUTPUT_LIMIT,
-                          FOC_CURRENT_LOOP_DEFAULT_OUTPUT_LIMIT);
+    FOC_PIController_Init(&foc_close_loop_q_pi,
+                          FOC_CLOSE_LOOP_DEFAULT_KP,
+                          FOC_CLOSE_LOOP_DEFAULT_KI,
+                          FOC_CLOSE_LOOP_DEFAULT_CONTROL_PERIOD,
+                          -FOC_CLOSE_LOOP_DEFAULT_OUTPUT_LIMIT,
+                          FOC_CLOSE_LOOP_DEFAULT_OUTPUT_LIMIT);
 }
 
-void FOC_CurrentLoop_Reset(void)
+void FOC_CloseLoop_Reset(void)
 {
-    foc_current_loop_state.IdFeedback = 0.0f;
-    foc_current_loop_state.IqFeedback = 0.0f;
-    foc_current_loop_state.UdOutput = 0.0f;
-    foc_current_loop_state.UqOutput = 0.0f;
+    foc_close_loop_state.IdFeedback = 0.0f;
+    foc_close_loop_state.IqFeedback = 0.0f;
+    foc_close_loop_state.UdOutput = 0.0f;
+    foc_close_loop_state.UqOutput = 0.0f;
 
-    FOC_PIController_Reset(&foc_current_loop_d_pi);
-    FOC_PIController_Reset(&foc_current_loop_q_pi);
+    FOC_PIController_Reset(&foc_close_loop_d_pi);
+    FOC_PIController_Reset(&foc_close_loop_q_pi);
 }
 
-void FOC_CurrentLoop_SetTarget(float id_ref, float iq_ref)
+void FOC_CloseLoop_SetTarget(float id_ref, float iq_ref)
 {
-    foc_current_loop_state.IdRef = id_ref;
-    foc_current_loop_state.IqRef = iq_ref;
+    foc_close_loop_state.IdRef = id_ref;
+    foc_close_loop_state.IqRef = iq_ref;
 }
 
-void FOC_CurrentLoop_SetPI(float kp, float ki)
+void FOC_CloseLoop_SetPI(float kp, float ki)
 {
-    FOC_PIController_SetGains(&foc_current_loop_d_pi, kp, ki);
-    FOC_PIController_SetGains(&foc_current_loop_q_pi, kp, ki);
+    FOC_PIController_SetGains(&foc_close_loop_d_pi, kp, ki);
+    FOC_PIController_SetGains(&foc_close_loop_q_pi, kp, ki);
 }
 
-void FOC_CurrentLoop_SetControlPeriod(float control_period)
+void FOC_CloseLoop_SetControlPeriod(float control_period)
 {
-    foc_current_loop_d_pi.ControlPeriod = control_period;
-    foc_current_loop_q_pi.ControlPeriod = control_period;
+    foc_close_loop_d_pi.ControlPeriod = control_period;
+    foc_close_loop_q_pi.ControlPeriod = control_period;
 }
 
-void FOC_CurrentLoop_SetOutputLimit(float output_limit)
+void FOC_CloseLoop_SetOutputLimit(float output_limit)
 {
     if (output_limit < 0.0f)
     {
         output_limit = -output_limit;
     }
 
-    FOC_PIController_SetOutputLimit(&foc_current_loop_d_pi, -output_limit, output_limit);
-    FOC_PIController_SetOutputLimit(&foc_current_loop_q_pi, -output_limit, output_limit);
+    FOC_PIController_SetOutputLimit(&foc_close_loop_d_pi, -output_limit, output_limit);
+    FOC_PIController_SetOutputLimit(&foc_close_loop_q_pi, -output_limit, output_limit);
 }
 
-FOC_DQTypeDef FOC_CurrentLoop_Update(FOC_DQTypeDef current_dq)
+//通过两个 PI 控制器算出应该施加的 Ud/Uq 电压
+FOC_DQTypeDef FOC_CloseLoop_Update(FOC_DQTypeDef feedback_dq)
 {
     FOC_DQTypeDef voltage_dq;
 
-    foc_current_loop_state.IdFeedback = current_dq.D;
-    foc_current_loop_state.IqFeedback = current_dq.Q;
+    foc_close_loop_state.IdFeedback = feedback_dq.D;
+    foc_close_loop_state.IqFeedback = feedback_dq.Q;
 
-    voltage_dq.D = FOC_PIController_Update(&foc_current_loop_d_pi,
-                                           foc_current_loop_state.IdRef,
-                                           foc_current_loop_state.IdFeedback);
+    voltage_dq.D = FOC_PIController_Update(&foc_close_loop_d_pi,
+                                           foc_close_loop_state.IdRef,
+                                           foc_close_loop_state.IdFeedback);
 
-    voltage_dq.Q = FOC_PIController_Update(&foc_current_loop_q_pi,
-                                           foc_current_loop_state.IqRef,
-                                           foc_current_loop_state.IqFeedback);
+    voltage_dq.Q = FOC_PIController_Update(&foc_close_loop_q_pi,
+                                           foc_close_loop_state.IqRef,
+                                           foc_close_loop_state.IqFeedback);
 
-    foc_current_loop_state.UdOutput = voltage_dq.D;
-    foc_current_loop_state.UqOutput = voltage_dq.Q;
+    foc_close_loop_state.UdOutput = voltage_dq.D;
+    foc_close_loop_state.UqOutput = voltage_dq.Q;
 
     return voltage_dq;
 }
 
-FOC_CurrentLoopStateTypeDef FOC_CurrentLoop_GetState(void)
+FOC_CloseLoopStateTypeDef FOC_CloseLoop_GetState(void)
 {
-    return foc_current_loop_state;
+    return foc_close_loop_state;
 }
