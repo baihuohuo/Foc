@@ -3,7 +3,7 @@
 #include "stm32f4xx_tim.h"
 #include "stm32f4xx_rcc.h"
 #include "misc.h"
-#include "open_loop_foc.h"
+#include "foc_open_loop.h"
 
 // 记录当前控制周期, 单位: ms
 static uint16_t tim6_control_period_ms = TIM6_CONTROL_DEFAULT_PERIOD_MS;

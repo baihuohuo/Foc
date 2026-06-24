@@ -5,9 +5,10 @@
 #include "bsp_tim8_pwm.h"
 #include "bsp_tim6_control.h"
 #include "bsp_adc.h"
-#include "foc_math.h"
-#include "open_loop_foc.h"
 #include "bsp_vofa.h"
+#include "foc_math.h"
+#include "foc_open_loop.h"
+#include "foc_close_loop.h"
 
 #define APP_UQ_STEP              0.2f
 #define APP_SPEED_STEP_RAD_S     6.2831853f

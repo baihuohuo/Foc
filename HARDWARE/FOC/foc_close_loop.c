@@ -1,10 +1,10 @@
-#include "foc_current_loop.h"
+#include "foc_close_loop.h"
 
 static FOC_CurrentLoopStateTypeDef foc_current_loop_state;
 static FOC_PIControllerTypeDef foc_current_loop_d_pi;
 static FOC_PIControllerTypeDef foc_current_loop_q_pi;
 
-void FOC_CurrentLoop_Init(void)
+void FOC_CurrentLoop_Init(void) 
 {
     foc_current_loop_state.IdRef = FOC_CURRENT_LOOP_DEFAULT_ID_REF;
     foc_current_loop_state.IqRef = FOC_CURRENT_LOOP_DEFAULT_IQ_REF;

@@ -506,49 +506,9 @@
               <FilePath>..\HARDWARE\TIM\bsp_tim8_pwm.c</FilePath>
             </File>
             <File>
-              <FileName>foc_math.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_math.c</FilePath>
-            </File>
-            <File>
-              <FileName>open_loop_foc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\FOC\open_loop_foc.c</FilePath>
-            </File>
-            <File>
-              <FileName>foc_pi_controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_pi_controller.c</FilePath>
-            </File>
-            <File>
-              <FileName>foc_current_loop.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_current_loop.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_tim8_pwm.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\TIM\bsp_tim8_pwm.h</FilePath>
-            </File>
-            <File>
-              <FileName>foc_math.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_math.h</FilePath>
-            </File>
-            <File>
-              <FileName>open_loop_foc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\HARDWARE\FOC\open_loop_foc.h</FilePath>
-            </File>
-            <File>
-              <FileName>foc_pi_controller.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_pi_controller.h</FilePath>
-            </File>
-            <File>
-              <FileName>foc_current_loop.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\HARDWARE\FOC\foc_current_loop.h</FilePath>
             </File>
             <File>
               <FileName>bsp_tim6_control.c</FileName>
@@ -579,6 +539,46 @@
               <FileName>bsp_vofa.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\VOFA\bsp_vofa.h</FilePath>
+            </File>
+            <File>
+              <FileName>foc_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>foc_math.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_math.h</FilePath>
+            </File>
+            <File>
+              <FileName>foc_close_loop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_close_loop.c</FilePath>
+            </File>
+            <File>
+              <FileName>foc_close_loop.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_close_loop.h</FilePath>
+            </File>
+            <File>
+              <FileName>foc_pi_controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_pi_controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>foc_pi_controller.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_pi_controller.h</FilePath>
+            </File>
+            <File>
+              <FileName>foc_open_loop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_open_loop.c</FilePath>
+            </File>
+            <File>
+              <FileName>foc_open_loop.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\FOC\foc_open_loop.h</FilePath>
             </File>
           </Files>
         </Group>

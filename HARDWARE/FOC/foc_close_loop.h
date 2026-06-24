@@ -1,5 +1,5 @@
-#ifndef __FOC_CURRENT_LOOP_H__
-#define __FOC_CURRENT_LOOP_H__
+#ifndef __FOC_CLOSE_LOOP_H
+#define __FOC_CLOSE_LOOP_H
 
 #include "stm32f4xx.h"
 #include "foc_math.h"
