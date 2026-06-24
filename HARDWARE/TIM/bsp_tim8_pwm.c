@@ -13,7 +13,7 @@ void TIM8_PWM_ModuleInit(void)
     TIM8_PWM_Start();
 }
 // GPIO初始化: PI5/6/7 主输出, PH13/14/15 互补输出, PH9 刹车输入
-void TIM8_PWM_GPIO_Init(void)
+static void TIM8_PWM_GPIO_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -45,7 +45,7 @@ void TIM8_PWM_GPIO_Init(void)
 }
 
 // PWM初始化: 20kHz中心对齐, 带死区, 三相互补输出
-void TIM8_PWM_Init(void)
+static void TIM8_PWM_Init(void)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
     TIM_OCInitTypeDef TIM_OCInitStructure;
@@ -84,7 +84,7 @@ void TIM8_PWM_Init(void)
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;
 	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
-	TIM_OCInitStructure.TIM_Pulse = 4200u - 500u;
+	TIM_OCInitStructure.TIM_Pulse = 4200u - 300u;
 	TIM_OC4Init(TIM8, &TIM_OCInitStructure);
 	TIM_OC4PreloadConfig(TIM8, TIM_OCPreload_Enable);
     TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_OC4Ref);

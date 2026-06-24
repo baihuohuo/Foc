@@ -61,12 +61,13 @@ typedef struct
 void BSP_ADC_Init(void);                                          // ADC初始化
 void BSP_ADC_CalibrateMT2AmpOffset(void);                         // MT2相电流零点校准(电机断电时调用)
 void BSP_ADC_Update(void);                                        // 更新ADC采样数据
-uint16_t BSP_ADC_GetRawAdc(BSP_ADC_ChannelTypeDef channel);       // 获取原始ADC值
 float BSP_ADC_GetRealBMT2_VBUS_Voltage(void);                     // 获取母线电压 (单位: V)
 float BSP_ADC_GetRealPhase_MT2_I_MAX(void);                       // 获取三相电流最大绝对值 (单位: A)
+BSP_ADC_DataTypeDef BSP_ADC_GetAllData(void);                     // 获取完整ADC数据
+
+//暂时不需要的函数
 float BSP_ADC_GetMT2AmpU_OffsetVoltage(void);                     // 获取U相校准后的零点电压 (单位: V)
 float BSP_ADC_GetMT2AmpV_OffsetVoltage(void);                     // 获取V相校准后的零点电压 (单位: V)
 float BSP_ADC_GetMT2AmpW_OffsetVoltage(void);                     // 获取W相校准后的零点电压 (单位: V)
-BSP_ADC_DataTypeDef BSP_ADC_GetAllData(void);                     // 获取完整ADC数据
 
 #endif /* __BSP_ADC_H__ */

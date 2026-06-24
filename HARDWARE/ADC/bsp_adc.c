@@ -219,8 +219,8 @@ void BSP_ADC_Update(void)
     bsp_adc_data.RealPhaseMT2_AMPU = BSP_ADC_RawToPhaseCurrent_A(bsp_adc_data.RawAdcPhaseMT2_AMPU, mt2_amp_u_offset_voltage);
     bsp_adc_data.RealPhaseMT2_AMPV = BSP_ADC_RawToPhaseCurrent_A(bsp_adc_data.RawAdcPhaseMT2_AMPV, mt2_amp_v_offset_voltage);
     bsp_adc_data.RealPhaseMT2_AMPW = BSP_ADC_RawToPhaseCurrent_A(bsp_adc_data.RawAdcPhaseMT2_AMPW, mt2_amp_w_offset_voltage);
-    bsp_adc_data.RealBMT2_VBUS = BSP_ADC_RawToPinVoltage(bsp_adc_data.RawAdcBMT2_VBUS) * BSP_ADC_BMT2_VBUS_VOLTAGE_SCALE;
-    bsp_adc_data.RealMT2_Vtemp = BSP_ADC_RawToPinVoltage(bsp_adc_data.RawAdcMT2_Vtemp) * BSP_ADC_MT2_Vtemp_SCALE;
+    bsp_adc_data.RealBMT2_VBUS = 0;
+    bsp_adc_data.RealMT2_Vtemp = 0;
 
     /* 计算三相电流绝对值的最大值 */
     bsp_adc_data.RealPhaseMT2_I_MAX = BSP_ADC_GetMaxAbs3(bsp_adc_data.RealPhaseMT2_AMPU,
@@ -228,46 +228,6 @@ void BSP_ADC_Update(void)
                                                         bsp_adc_data.RealPhaseMT2_AMPW);
 }
 
-// 获取原始ADC值
-uint16_t BSP_ADC_GetRawAdc(BSP_ADC_ChannelTypeDef channel)
-{
-    uint16_t raw_value;
-
-    raw_value = 0u;
-
-    switch (channel)
-    {
-        case BSP_ADC_CHANNEL_PHASE_MT2_AMPU:
-            raw_value = bsp_adc_data.RawAdcPhaseMT2_AMPU;
-            break;
-
-        case BSP_ADC_CHANNEL_PHASE_MT2_AMPV:
-            raw_value = bsp_adc_data.RawAdcPhaseMT2_AMPV;
-            break;
-
-        case BSP_ADC_CHANNEL_PHASE_MT2_AMPW:
-            raw_value = bsp_adc_data.RawAdcPhaseMT2_AMPW;
-            break;
-
-        case BSP_ADC_CHANNEL_BMT2_VBUS:
-            raw_value = bsp_adc_data.RawAdcBMT2_VBUS;
-            break;
-
-        case BSP_ADC_CHANNEL_MT2_Vtemp:
-            raw_value = bsp_adc_data.RawAdcMT2_Vtemp;
-            break;
-
-        case BSP_ADC_CHANNEL_PHASE_MT2_I_MAX:
-            raw_value = bsp_adc_data.RawAdcPhaseMT2_I_MAX;
-            break;
-
-        default:
-            raw_value = 0u;
-            break;
-    }
-
-    return raw_value;
-}
 
 // 获取母线电压 (单位: V)
 float BSP_ADC_GetRealBMT2_VBUS_Voltage(void)
@@ -278,24 +238,6 @@ float BSP_ADC_GetRealBMT2_VBUS_Voltage(void)
 float BSP_ADC_GetRealPhase_MT2_I_MAX(void)
 {
     return bsp_adc_data.RealPhaseMT2_I_MAX;
-}
-
-// 获取U相校准后的零点电压 (单位: V)
-float BSP_ADC_GetMT2AmpU_OffsetVoltage(void) 
-{
-    return mt2_amp_u_offset_voltage;
-}
-
-// 获取V相校准后的零点电压 (单位: V)
-float BSP_ADC_GetMT2AmpV_OffsetVoltage(void)
-{
-    return mt2_amp_v_offset_voltage;
-}
-
-// 获取W相校准后的零点电压 (单位: V)
-float BSP_ADC_GetMT2AmpW_OffsetVoltage(void)
-{
-    return mt2_amp_w_offset_voltage;
 }
 
 // 获取完整ADC数据

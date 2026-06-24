@@ -18,13 +18,12 @@ typedef struct
 
 /* -----------------------函数声明 -------------------*/
 // TIM8 PWM相关函数
-void TIM8_PWM_GPIO_Init(void);                              // GPIO初始化
-void TIM8_PWM_Init(void);                                  // PWM初始化
+static void TIM8_PWM_GPIO_Init(void);                      // GPIO初始化
+static void TIM8_PWM_Init(void);                           // PWM初始化
 void TIM8_PWM_Start(void);                                 // 启动PWM
 void TIM8_PWM_Stop(void);                                  // 停止PWM
 void TIM8_PWM_ModuleInit(void);                            // TIM8 PWM模块一键初始化
 void TIM8_PWM_SetDuty(uint16_t duty_a, uint16_t duty_b, uint16_t duty_c);  // 设置三相占空比
-void TIM8_PWM_SetDutyStruct(TIM8_PWM_DutyTypeDef duty);   // 结构体方式设置占空比
 uint16_t TIM8_PWM_GetPeriod(void);                         // 获取PWM周期
 
 #endif /* __BSP_TIM8_PWM_H */
