@@ -6,8 +6,10 @@
 #include "bsp_tim6_control.h"
 #include "bsp_adc.h"
 #include "bsp_vofa.h"
+#include "bsp_hall.h"
 #include "foc_math.h"
 #include "foc_close_loop.h"
+#include <stdio.h>
 
 #define APP_IQ_DEFAULT            0.30f
 #define APP_IQ_STEP               0.05f
@@ -18,20 +20,20 @@
 #define APP_CLOSE_LOOP_KP         0.05f
 #define APP_CLOSE_LOOP_KI         5.00f
 #define APP_CLOSE_LOOP_LIMIT      1.00f
-#define APP_PRINT_PERIOD_MS       10u
+#define APP_VOFA_PERIOD_MS       10u
 
 static float app_iq_ref = APP_IQ_DEFAULT;
 static float app_speed_ref = APP_SPEED_DEFAULT;
-
+static BSP_HALL_DataTypeDef hall_data;
 static void App_PrintFOCState(void)
 {
     FOC_CloseLoopStateTypeDef state;
 
     state = FOC_CloseLoop_GetState();
 
-VOFA_SendJustFloat(state.IdFeedback,
-                   state.IqFeedback,
-                   state.UdOutput);
+//VOFA_SendJustFloat(state.IdFeedback,
+//                   state.IqFeedback,
+//                   state.UdOutput);
 }
 
 static void App_KeyTask(void)
@@ -85,14 +87,14 @@ static void App_KeyTask(void)
 
 int main(void)
 {
-    uint16_t print_tick = 0u;
-
     SysTick_Init();
     uart_init(115200);
 
     KEY_GPIO_Init();
     KEY_EdgeStateReset();
 
+	BSP_HALL_Init();
+	
     TIM8_PWM_ModuleInit();
     BSP_ADC_Init();
 
@@ -115,14 +117,17 @@ int main(void)
     App_PrintFOCState();
 
     while (1)
-    {
-        App_KeyTask();
+	{
+		App_KeyTask();
 
-        print_tick++;
-        if (print_tick >= APP_PRINT_PERIOD_MS)
-        {
-            print_tick = 0u;
-            App_PrintFOCState();
-        }
-    }
+        hall_data = BSP_HALL_GetAllData();
+
+        VOFA_SendJustFloat5(hall_data.RawElectricalAngle,
+                            hall_data.ElectricalAngle,
+                            hall_data.ElectricalSpeedRadS,
+                            (float)hall_data.Direction,
+                            hall_data.LastEdgePeriodSec);
+
+        BSP_DelayMs(APP_VOFA_PERIOD_MS);
+	}
 }

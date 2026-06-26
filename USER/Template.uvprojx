@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\KEY;..\HARDWARE\Systick;..\HARDWARE\FOC;..\HARDWARE\TIM;..\HARDWARE\ADC;..\HARDWARE\VOFA</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\KEY;..\HARDWARE\Systick;..\HARDWARE\FOC;..\HARDWARE\TIM;..\HARDWARE\ADC;..\HARDWARE\VOFA;..\HARDWARE\HALL</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -539,6 +539,16 @@
               <FileName>bsp_vofa.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\VOFA\bsp_vofa.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_hall.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\HALL\bsp_hall.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_hall.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\HARDWARE\HALL\bsp_hall.h</FilePath>
             </File>
             <File>
               <FileName>foc_math.c</FileName>

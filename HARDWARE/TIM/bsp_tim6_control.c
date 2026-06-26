@@ -5,6 +5,7 @@
 #include "misc.h"
 #include "foc_open_loop.h"       //测试开环控制
 #include "foc_close_loop.h"      //闭环控制头文件
+#include "bsp_hall.h"
 
 // 记录当前控制周期, 单位: ms
 static uint16_t tim6_control_period_ms = TIM6_CONTROL_DEFAULT_PERIOD_MS;
@@ -91,6 +92,7 @@ void TIM6_DAC_IRQHandler(void)
     if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
     {
         TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
+        BSP_HALL_Update(0.001f);
         FOC_CloseLoop_Update();
     }
 }

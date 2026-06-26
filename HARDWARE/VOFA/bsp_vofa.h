@@ -12,5 +12,6 @@
   * @note      CH0=当前转速(RPM), CH1=目标转速(RPM), CH2=占空比
   */
 void VOFA_SendJustFloat(float ch1, float ch2, float ch3);
+void VOFA_SendJustFloat5(float ch1, float ch2, float ch3, float ch4, float ch5);
 
 #endif

@@ -3,6 +3,11 @@
 
 #include "stm32f4xx.h"
 
+/* -----------------------宏定义 -------------------*/
+#define TIM8_PWM_FREQUENCY_HZ         20000u      /* PWM频率 20kHz */
+#define TIM8_PWM_DEAD_TIME            84u         /* 死区时间 84ns */
+#define TIM8_PWM_DUTY_MIN             0u          /* 最小占空比 */
+
 /* -----------------------类型定义 -------------------*/
 typedef struct
 {
@@ -11,10 +16,6 @@ typedef struct
   uint16_t DutyC;  // C相占空比计数值, 对应 TIM8->CCR3
 }TIM8_PWM_DutyTypeDef;
 
-/* -----------------------宏定义 -------------------*/
-#define TIM8_PWM_FREQUENCY_HZ         20000u      /* PWM频率 20kHz */
-#define TIM8_PWM_DEAD_TIME            84u         /* 死区时间 84ns */
-#define TIM8_PWM_DUTY_MIN             0u          /* 最小占空比 */
 
 /* -----------------------函数声明 -------------------*/
 // TIM8 PWM相关函数

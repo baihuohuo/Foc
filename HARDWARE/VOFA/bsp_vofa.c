@@ -34,4 +34,35 @@ void VOFA_SendJustFloat(float ch1, float ch2, float ch3)
         USART_SendData(USART1, txData[i]);
     }
 }
+void VOFA_SendJustFloat5(float ch1, float ch2, float ch3, float ch4, float ch5)
+{
+    uint8_t i;
+    uint8_t txData[24];
+    uint8_t *pFloat;
 
+    pFloat = (uint8_t *)&ch1;
+    for (i = 0; i < 4; i++) txData[i] = pFloat[i];
+
+    pFloat = (uint8_t *)&ch2;
+    for (i = 0; i < 4; i++) txData[4 + i] = pFloat[i];
+
+    pFloat = (uint8_t *)&ch3;
+    for (i = 0; i < 4; i++) txData[8 + i] = pFloat[i];
+
+    pFloat = (uint8_t *)&ch4;
+    for (i = 0; i < 4; i++) txData[12 + i] = pFloat[i];
+
+    pFloat = (uint8_t *)&ch5;
+    for (i = 0; i < 4; i++) txData[16 + i] = pFloat[i];
+
+    txData[20] = 0x00;
+    txData[21] = 0x00;
+    txData[22] = 0x80;
+    txData[23] = 0x7F;
+
+    for (i = 0; i < 24; i++)
+    {
+        while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+        USART_SendData(USART1, txData[i]);
+    }
+}
