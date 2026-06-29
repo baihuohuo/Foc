@@ -38,7 +38,7 @@ typedef enum
 
 /* -----------------------函数声明 -------------------*/
 void KEY_GPIO_Init(void);                     // 初始化GPIO (浮空输入)
-
+void KEY_EdgeStateReset(void);				  // 重置所有按键边沿状态
 // 阻塞型按键读取: 等待按键弹开后返回
 KEYState_TypeDef KEY1_StateRead(void);        // 读取KEY1状态
 KEYState_TypeDef KEY2_StateRead(void);        // 读取KEY2状态
@@ -47,7 +47,6 @@ KEYState_TypeDef KEY4_StateRead(void);        // 读取KEY4状态
 KEYState_TypeDef KEY5_StateRead(void);        // 读取KEY5状态
 
 // 非阻塞型边沿检测: 只在新按下瞬间返回KEY_DOWN
-void KEY_EdgeStateReset(void);                // 重置边沿检测状态
 KEYState_TypeDef KEY1_EdgeRead(void);         // 读取KEY1边沿
 KEYState_TypeDef KEY2_EdgeRead(void);         // 读取KEY2边沿
 KEYState_TypeDef KEY3_EdgeRead(void);         // 读取KEY3边沿

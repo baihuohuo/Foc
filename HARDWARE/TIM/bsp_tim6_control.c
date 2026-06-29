@@ -93,6 +93,6 @@ void TIM6_DAC_IRQHandler(void)
     {
         TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
         BSP_HALL_Update(0.001f);
-        FOC_CloseLoop_Update();
+        OpenLoopFOC_Update();
     }
 }

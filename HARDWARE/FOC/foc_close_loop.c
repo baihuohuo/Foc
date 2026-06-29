@@ -133,8 +133,7 @@ void FOC_CloseLoop_Update(void)
         return;
     }
 
-    foc_close_loop_state.ThetaE += foc_close_loop_state.SpeedRefRadS * foc_close_loop_state.ControlPeriodSec;
-    foc_close_loop_state.ThetaE = FOC_NormalizeAngle(foc_close_loop_state.ThetaE);
+    foc_close_loop_state.ThetaE = BSP_HALL_GetElectricalAngle();
 
     BSP_ADC_Update();
     adc_data = BSP_ADC_GetAllData();
